@@ -1,7 +1,10 @@
 class Jugador:
-
+    vidas = 20
     def __init__(self, tipo_jugador):
-        self.tipo_jugador = tipo_jugador
-        self.vidas = 20
-    
-    
+        self.tipo = tipo_jugador
+
+jose = Jugador("jugador")
+maquina = Jugador("máquina")
+
+if jose.tipo == "jugador":
+    print("Jose es un jugador")
