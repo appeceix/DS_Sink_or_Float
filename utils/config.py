@@ -1,0 +1,6 @@
+
+
+
+BOAT_SIZE = [1, 2, 3, 4]
+BOARD_SIZE = 10
+
