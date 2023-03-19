@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import random
 
 
@@ -31,10 +30,13 @@ Herramienta para que nosotros llevemos registro de
 nuestros disparos.
 '''
 
-BOAT_SIZE = [1, 1, 1, 1, 2, 2, 2, 3, 3, 4]
-'''
-Herramienta para colocar los barcos del tamaño adecuado.
-'''
+# Variables que nos ayudarán en la colocación de nuestros barcos.
+BOAT_1 = 1
+BOAT_2 = 2
+BOAT_3 = 3
+BOAT_4 = 4
+VAR_INTERM = 0
+
 
 BOAT_SIZE1 = [1, 1, 1, 1, 2, 2, 2, 3, 3, 4]
 '''
