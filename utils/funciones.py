@@ -1,7 +1,6 @@
 # IMPORTACIÓN DE LIBRERÍAS #
 
 import numpy as np
-import pandas as pd
 import random
 import time
 import sys
@@ -20,7 +19,7 @@ soundlost = pygame.mixer.Sound("sonidolost.mp3")
 # IMPORTACIÓN DE VARIABLES CONFIG #
 
 from utils.config import BOARD_SIZE, MAR, BARCO, DISPARO_AGUA, DISPARO_BARCO,\
-      TABLERO, TABLERO1, VISOR, VIDAS_JUGADOR, VIDAS_MAQUINA
+      TABLERO, TABLERO1, VISOR, VIDAS_JUGADOR, VIDAS_MAQUINA, BOAT_1, BOAT_2, BOAT_3, BOAT_4
 
 
 # FUNCIONES #
@@ -30,132 +29,136 @@ def colocar_barcos_jugador():
     Para colocar nuestros barcos en el tablero a través de tres inputs: 
     orientación, coordenada X y coordenada Y.
     '''
-    from utils.config import CNT_BOAT, BOAT_SIZE
+    from utils.config import CNT_BOAT
 
 
     while CNT_BOAT < 10: # Para establecer el límite de barcos a colocar.
 
-        for i in BOAT_SIZE: # Este bucle cogerá el tamaño del barco de la lista de barcos.
-
-            orient_valida = False # De esta manera nos aseguramos que el input de orientación sea válido.
-            while not orient_valida:
-                orient = input("Dame la orientacion del barco (N, S, E o W): ")
-                if orient not in ["N", "S", "E", "W"]:
-                    print("Orientación no válida, tiene que ser N, S, E o W")
-                else:
-                    orient_valida = True
-            
-            while True: # Comprobación de la validez de las coordenadas X e Y
-                try:
-                    colocar_x = int(input("Dame la coordenada X: "))
-                    if colocar_x < 0 or colocar_x >9:
-                        print("Coordenada X no válida. Recuerda que debe ser entre 0 y 9. Inténtalo de nuevo:")
-                        continue
-                    break
-                except ValueError:
+        orient_valida = False # De esta manera nos aseguramos de que el input de orientación sea válido.
+        while not orient_valida:
+            orient = input("Dame la orientacion del barco (N, S, E o W): ")
+            if orient not in ["N", "S", "E", "W"]:
+                print("Orientación no válida, tiene que ser N, S, E o W")
+            else:
+                orient_valida = True
+        
+        while True: # Comprobación de la validez de las coordenadas X e Y
+            try:
+                colocar_x = int(input("Dame la coordenada X: "))
+                if colocar_x < 0 or colocar_x >9:
                     print("Coordenada X no válida. Recuerda que debe ser entre 0 y 9. Inténtalo de nuevo:")
-
-            while True:
-                try:
-                    colocar_y = int(input("Dame la coordenada Y: "))
-                    if colocar_y <0 or colocar_y > 9:
-                        print("Coordenada Y no válida. Recuerda que debe ser entre 0 y 9. Inténtalo de nuevo:")
-                        continue
-                    break
-                except ValueError:
-                    print("Coordenada Y no válida. Recuerda que debe ser entre 0 y 9. Inténtalo de nuevo:")
-
-
-
-
-            if orient == "N":
-
-                if ((colocar_x-i+1) >= 0)&\
-                    (TABLERO[(colocar_x-i+1):(colocar_x+1), colocar_y] != BARCO).all(): #Requisito para colocar un barco.
-
-                    TABLERO[(colocar_x-i+1):(colocar_x+1), colocar_y] = BARCO
-                    print(f"Barco número {CNT_BOAT+1} colocado:")
-                    CNT_BOAT += 1 # En caso True aumentamos el contador de barcos para cambiar el tamaño de los barcos.
-                    
-                elif ((colocar_x-i+1) < 0): # Advertencia
-                    print("Te estás saliendo por arriba")
-                   
-                else: # Advertencia
-                    print("¡Estás pisando otro barco!")
-
-                time.sleep(1)
-                print(TABLERO)
-
-                                
-                
-            
-            if orient == "S":
-
-                if ((colocar_x+i) <= BOARD_SIZE)&\
-                    (TABLERO[colocar_x:(colocar_x+i), colocar_y] != BARCO).all():
-
-                    TABLERO[colocar_x:(colocar_x+i), colocar_y] = BARCO
-                    print(f"Barco número {CNT_BOAT+1} colocado:")
-                    CNT_BOAT += 1 
-
-                elif ((colocar_x+i) > BOARD_SIZE):
-                    print("Te estás saliendo por abajo")
-                    
-                else:
-                    print("¡Estás pisando otro barco!")
-                    
-                time.sleep(1)
-                print(TABLERO)   
-
-         
-                    
-            
-            if orient == "E":
-                
-                if ((colocar_y+i) <= BOARD_SIZE)&\
-                    (TABLERO[colocar_x, colocar_y:(colocar_y+i)] != BARCO).all():
-
-                    TABLERO[colocar_x, colocar_y:(colocar_y+i)] = BARCO
-                    print(f"Barco número {CNT_BOAT+1} colocado:")
-                    CNT_BOAT += 1
-
-                elif ((colocar_y+i) > BOARD_SIZE):
-                    print("Te estás saliendo por la derecha")
-                    
-                else:
-                    print("¡Estás pisando otro barco!")
-                    
-                time.sleep(1)
-                print(TABLERO)
-                
-
-             
-                
-            
-            if orient == "W":
-
-                if ((colocar_y-i+1) >= 0)&\
-                    (TABLERO[colocar_x, (colocar_y-i+1):(colocar_y+1)] != BARCO).all():
-
-                    TABLERO[colocar_x, (colocar_y-i+1):(colocar_y+1)] = BARCO
-                    print(f"Barco número {CNT_BOAT+1} colocado:")
-                    CNT_BOAT += 1
-
-                elif ((colocar_y-i+1) < 0):
-                    print("Te estás saliendo por la izquierda")
-                    
-                else:
-                    print("¡Estás pisando otro barco!")
-                    
-                time.sleep(1)
-                print(TABLERO)     
-       
-                
-            if CNT_BOAT == 10: # Cuando llegamos a 10 se acaba el bucle se termina esta función.
-                print("\n Perfecto, ya has colocado todos tus barcos:")
-                time.sleep(1)
-                print(TABLERO)
+                    continue
                 break
+            except ValueError:
+                print("Coordenada X no válida. Recuerda que debe ser entre 0 y 9. Inténtalo de nuevo:")
+
+        while True:
+            try:
+                colocar_y = int(input("Dame la coordenada Y: "))
+                if colocar_y <0 or colocar_y > 9:
+                    print("Coordenada Y no válida. Recuerda que debe ser entre 0 y 9. Inténtalo de nuevo:")
+                    continue
+                break
+            except ValueError:
+                print("Coordenada Y no válida. Recuerda que debe ser entre 0 y 9. Inténtalo de nuevo:")
+
+        if CNT_BOAT <= 3:
+            VAR_INTERM = BOAT_1
+        elif CNT_BOAT <=6 :
+            VAR_INTERM = BOAT_2
+        elif CNT_BOAT <= 8:
+            VAR_INTERM = BOAT_3
+        else:
+            VAR_INTERM = BOAT_4
+
+        
+        if orient == "N":
+
+            
+            if ((colocar_x-VAR_INTERM+1) >= 0)&\
+                (TABLERO[(colocar_x-VAR_INTERM+1):(colocar_x+1), colocar_y] != BARCO).all(): #Requisito para colocar un barco.
+
+                TABLERO[(colocar_x-VAR_INTERM+1):(colocar_x+1), colocar_y] = BARCO
+                print(f"Barco número {CNT_BOAT+1} colocado:")
+                CNT_BOAT += 1 # En caso True aumentamos el contador de barcos para cambiar el tamaño de los barcos.
+                
+            elif ((colocar_x-VAR_INTERM+1) < 0): # Advertencia
+                print("Te estás saliendo por arriba")
+                
+            else: # Advertencia
+                print("¡Estás pisando otro barco!")
+
+            time.sleep(1)
+            print(TABLERO)
+
+                            
+            
+        
+        if orient == "S":
+
+            if ((colocar_x+VAR_INTERM) <= BOARD_SIZE)&\
+                (TABLERO[colocar_x:(colocar_x+VAR_INTERM), colocar_y] != BARCO).all():
+
+                TABLERO[colocar_x:(colocar_x+VAR_INTERM), colocar_y] = BARCO
+                print(f"Barco número {CNT_BOAT+1} colocado:")
+                CNT_BOAT += 1 
+
+            elif ((colocar_x+VAR_INTERM) > BOARD_SIZE):
+                print("Te estás saliendo por abajo")
+                
+            else:
+                print("¡Estás pisando otro barco!")
+                
+            time.sleep(1)
+            print(TABLERO)   
+
+        
+                
+        
+        if orient == "E":
+            
+            if ((colocar_y+VAR_INTERM) <= BOARD_SIZE)&\
+                (TABLERO[colocar_x, colocar_y:(colocar_y+VAR_INTERM)] != BARCO).all():
+
+                TABLERO[colocar_x, colocar_y:(colocar_y+VAR_INTERM)] = BARCO
+                print(f"Barco número {CNT_BOAT+1} colocado:")
+                CNT_BOAT += 1
+
+            elif ((colocar_y+VAR_INTERM) > BOARD_SIZE):
+                print("Te estás saliendo por la derecha")
+                
+            else:
+                print("¡Estás pisando otro barco!")
+                
+            time.sleep(1)
+            print(TABLERO)
+            
+
+        
+        if orient == "W":
+
+            if ((colocar_y-VAR_INTERM+1) >= 0)&\
+                (TABLERO[colocar_x, (colocar_y-VAR_INTERM+1):(colocar_y+1)] != BARCO).all():
+
+                TABLERO[colocar_x, (colocar_y-VAR_INTERM+1):(colocar_y+1)] = BARCO
+                print(f"Barco número {CNT_BOAT+1} colocado:")
+                CNT_BOAT += 1
+
+            elif ((colocar_y-VAR_INTERM+1) < 0):
+                print("Te estás saliendo por la izquierda")
+                
+            else:
+                print("¡Estás pisando otro barco!")
+                
+            time.sleep(1)
+            print(TABLERO)     
+    
+            
+        if CNT_BOAT == 10: # Cuando llegamos a 10 se acaba el bucle se termina esta función.
+            print("\n Perfecto, ya has colocado todos tus barcos:")
+            time.sleep(1)
+            print(TABLERO)
+            break
                  
 
 
